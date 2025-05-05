@@ -8,31 +8,129 @@ function(add_deps_to name)
 
   foreach(pkg IN LISTS packages)
 
-    if(pkg STREQUAL "ALL" OR pkg STREQUAL "redis-plus-plus")
-      message(STATUS "Adding ${pkg} !")
+    message(STATUS "Adding ${pkg} !")
+
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "openssl")
       if(NOT ADD_DEPS_LINK_ONLY)
-        list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-        find_package(Hiredis REQUIRED)
-        # target_link_libraries(${name} PRIVATE ${HIREDIS_LIBRARIES})
+        if(NOT TARGET OpenSSL::Crypto)
+          set(OPENSSL_USE_STATIC_LIBS TRUE)
+          find_package(OpenSSL REQUIRED)
+          if(NOT OpenSSL_FOUND)
+            message(
+              FATAL_ERROR
+                "OpenSSL not found. Please install OpenSSL development libraries."
+            )
+          endif()
+        else()
+          message(STATUS "OpenSSL is already available, only linking it!")
+        endif()
+        target_link_libraries(${name} PRIVATE OpenSSL::Crypto)
+      endif()
+    endif()
 
-        cpmaddpackage(
-          NAME
-          redis-plus-plus
-          GIT_TAG
-          e30d4c4c557568b01d5adce9df2714de8d3921c2
-          # 75a75ec305b2c1786e022e6e130b4e03e0659ade
-          GITHUB_REPOSITORY
-          sewenew/redis-plus-plus
-          OPTIONS
-          "REDIS_PLUS_PLUS_BUILD_STATIC ON"
-          "REDIS_PLUS_PLUS_BUILD_SHARED OFF"
-          "REDIS_PLUS_PLUS_BUILD_TEST OFF")
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "curl")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET CURL::libcurl)
+          find_package(CURL REQUIRED)
+          if(NOT CURL_FOUND)
+            message(
+              FATAL_ERROR
+                "Curl not found. Please install libcurl development libraries.")
+          endif()
+        else()
+          message(STATUS "Curl is already available, only linking it!")
+        endif()
+        target_link_libraries(${name} PRIVATE CURL::libcurl)
+      endif()
+    endif()
 
-        # link a target from another directory scope >= cmake 3.13
-        cmake_policy(SET CMP0079 NEW)
-        target_link_libraries(redis++_static INTERFACE ${HIREDIS_LIBRARIES})
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "googletest")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET GTest::gtest_main)
+          cpmaddpackage(
+            NAME
+            googletest
+            GITHUB_REPOSITORY
+            google/googletest
+            GIT_TAG
+            v1.17.0
+            VERSION
+            1.17.0
+            OPTIONS
+            "INSTALL_GTEST OFF"
+            "gtest_force_shared_crt ON")
+          # include(GoogleTest)
+        else()
+          message(STATUS "googletest is already available, only linking it!")
+        endif()
+      endif()
+      target_link_libraries(${name} PRIVATE GTest::gtest_main)
+    endif()
+
+    # NOTE: redis-plus-plus requires hiredis to be installed
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "redis-plus-plus")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET redis-plus-plus::redis-plus-plus)
+          list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+          find_package(Hiredis REQUIRED)
+          # target_link_libraries(${name} PRIVATE ${HIREDIS_LIBRARIES})
+
+          cpmaddpackage(
+            NAME
+            redis-plus-plus
+            GIT_TAG
+            # should be swapped to version once commit "update
+            # cmake_minimum_required to 3.5" is included in a named version
+            e30d4c4c557568b01d5adce9df2714de8d3921c2
+            GITHUB_REPOSITORY
+            sewenew/redis-plus-plus
+            OPTIONS
+            "REDIS_PLUS_PLUS_BUILD_STATIC ON"
+            "REDIS_PLUS_PLUS_BUILD_SHARED OFF"
+            "REDIS_PLUS_PLUS_BUILD_TEST OFF")
+
+          # link a target from another directory scope >= cmake 3.13
+          cmake_policy(SET CMP0079 NEW)
+          target_link_libraries(redis++_static INTERFACE ${HIREDIS_LIBRARIES})
+        else()
+          message(
+            STATUS "redis-plus-plus is already available, only linking it!")
+        endif()
       endif()
       target_link_libraries(${name} PRIVATE redis++_static)
+    endif()
+
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "fmt")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET fmtlib::fmtlib
+           AND NOT TARGET fmt::fmt
+           AND NOT TARGET fmt::fmt-header-only)
+          cpmaddpackage("gh:fmtlib/fmt#11.2.0")
+        else()
+          message(STATUS "fmt is already available, only linking it!")
+        endif()
+      endif()
+      target_link_libraries(${name} PRIVATE fmt::fmt)
+    endif()
+
+    # NOTE: spdlog requires fmt to be added
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "spdlog")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET spdlog::spdlog)
+          cpmaddpackage(
+            NAME
+            spdlog
+            VERSION
+            1.15.2
+            GITHUB_REPOSITORY
+            "gabime/spdlog"
+            OPTIONS
+            "SPDLOG_FMT_EXTERNAL ON")
+        else()
+          message(STATUS "spdlog is already available, only linking it!")
+        endif()
+      endif()
+      target_link_libraries(${name} PRIVATE spdlog::spdlog)
     endif()
 
   endforeach()

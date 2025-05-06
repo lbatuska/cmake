@@ -133,5 +133,22 @@ function(add_deps_to name)
       target_link_libraries(${name} PRIVATE spdlog::spdlog)
     endif()
 
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "dotenv")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET dotenv)
+          cpmaddpackage(NAME dotenv-cpp GIT_TAG master GITHUB_REPOSITORY
+                        "laserpants/dotenv-cpp")
+          # cache the variable so it's available 2nd time when target exists
+          set(DOTENV_CPP_DIR
+              ${dotenv-cpp_SOURCE_DIR}
+              CACHE INTERNAL "")
+        else()
+          message(STATUS "dotenv is already available, only linking it!")
+        endif()
+      endif()
+      target_include_directories(${name}
+                                 PRIVATE ${DOTENV_CPP_DIR}/include/laserpants)
+    endif()
+
   endforeach()
 endfunction()

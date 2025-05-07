@@ -46,7 +46,7 @@ function(add_deps_to name)
 
     if(pkg STREQUAL "ALL" OR pkg STREQUAL "googletest")
       if(NOT ADD_DEPS_LINK_ONLY)
-        if(NOT TARGET GTest::gtest_main)
+        if(NOT TARGET gtest)
           cpmaddpackage(
             NAME
             googletest
@@ -58,13 +58,12 @@ function(add_deps_to name)
             1.17.0
             OPTIONS
             "INSTALL_GTEST OFF"
-            "gtest_force_shared_crt ON")
-          # include(GoogleTest)
+            "gtest_force_shared_crt")
         else()
           message(STATUS "googletest is already available, only linking it!")
         endif()
       endif()
-      target_link_libraries(${name} PRIVATE GTest::gtest_main)
+      target_link_libraries(${name} PRIVATE gtest gtest_main gmock)
     endif()
 
     # NOTE: redis-plus-plus requires hiredis to be installed
@@ -148,6 +147,41 @@ function(add_deps_to name)
       endif()
       target_include_directories(${name}
                                  PRIVATE ${DOTENV_CPP_DIR}/include/laserpants)
+    endif()
+
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "websocketpp")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET websocketpp)
+          cpmaddpackage(
+            NAME
+            websocketpp
+            GIT_TAG
+            0.8.2
+            GITHUB_REPOSITORY
+            "zaphoyd/websocketpp"
+            OPTIONS
+            "CMAKE_POLICY_VERSION_MINIMUM 3.5")
+          set(WEBSOCKET_CPP_DIR
+              ${websocketpp_SOURCE_DIR}
+              CACHE INTERNAL "")
+        else()
+          message(STATUS "websocketpp is already available, only linking it!")
+        endif()
+        target_include_directories(${name} PRIVATE ${WEBSOCKET_CPP_DIR})
+      endif()
+    endif()
+
+    # https://github.com/uNetworking/uWebSockets
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "ixwebsocket")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET ixwebsocket)
+          cpmaddpackage(NAME ixwebsocket VERSION 11.4.5 GITHUB_REPOSITORY
+                        "machinezone/IXWebSocket")
+        else()
+          message(STATUS "IXWebSocket is already available, only linking it!")
+        endif()
+        target_link_libraries(${name} PRIVATE ixwebsocket)
+      endif()
     endif()
 
   endforeach()

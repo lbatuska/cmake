@@ -184,5 +184,66 @@ function(add_deps_to name)
       endif()
     endif()
 
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "nlohmann_json")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET nlohmann_json::nlohmann_json)
+          cpmaddpackage(
+            NAME
+            nlohmann_json
+            VERSION
+            3.12.0
+            GITHUB_REPOSITORY
+            nlohmann/json
+            OPTIONS
+            "JSON_BuildTests OFF")
+        else()
+          message(STATUS "nlohmann_json is already available, only linking it!")
+        endif()
+        target_link_libraries(${name} PRIVATE nlohmann_json::nlohmann_json)
+      endif()
+    endif()
+
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "inja")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET inja)
+          cpmaddpackage(
+            NAME
+            inja
+            GITHUB_REPOSITORY
+            pantor/inja
+            # VERSION 3.4.0
+            GIT_TAG
+            main
+            OPTIONS
+            "BUILD_STATIC_LIBS ON"
+            "INJA_USE_EMBEDDED_JSON OFF"
+            "INJA_BUILD_TESTS OFF")
+          set(inja_CPP_DIR
+              ${inja_SOURCE_DIR}
+              CACHE INTERNAL "")
+        else()
+          message(STATUS "inja is already available, only linking it!")
+        endif()
+        target_include_directories(${name} SYSTEM
+                                   PRIVATE ${inja_CPP_DIR}/include)
+      endif()
+    endif()
+
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "jwt-cpp")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET jwt-cpp)
+          cpmaddpackage(NAME jwt-cpp GITHUB_REPOSITORY Thalhammer/jwt-cpp
+                        VERSION 0.7.1)
+          set(jwt-cpp_CPP_DIR
+              ${jwt-cpp_SOURCE_DIR}
+              CACHE INTERNAL "")
+        else()
+          message(STATUS "jwt-cpp is already available, only linking it!")
+        endif()
+        target_include_directories(${name} SYSTEM
+                                   PRIVATE ${jwt-cpp_CPP_DIR}/include)
+      endif()
+    endif()
+
   endforeach()
 endfunction()

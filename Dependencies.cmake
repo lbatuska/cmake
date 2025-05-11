@@ -70,8 +70,10 @@ function(add_deps_to name)
     if(pkg STREQUAL "ALL" OR pkg STREQUAL "redis-plus-plus")
       if(NOT ADD_DEPS_LINK_ONLY)
         if(NOT TARGET redis-plus-plus::redis-plus-plus)
-          list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-          find_package(Hiredis REQUIRED)
+          if(NOT TARGET Hiredis_lib)
+            list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+            find_package(Hiredis REQUIRED)
+          endif()
           # target_link_libraries(${name} PRIVATE ${HIREDIS_LIBRARIES})
 
           cpmaddpackage(
@@ -242,6 +244,27 @@ function(add_deps_to name)
         endif()
         target_include_directories(${name} SYSTEM
                                    PRIVATE ${jwt-cpp_CPP_DIR}/include)
+      endif()
+    endif()
+
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "cpr")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET cpr::cpr)
+          cpmaddpackage(
+            NAME
+            cpr
+            GIT_TAG
+            1.11.2
+            GITHUB_REPOSITORY
+            libcpr/cpr
+            OPTIONS
+            "CPR_BUILD_TESTS OFF"
+            "BUILD_SHARED_LIBS OFF"
+            "CPR_ENABLE_SSL ON")
+        else()
+          message(STATUS "cpr is already available, only linking it!")
+        endif()
+        target_link_libraries(${name} PRIVATE cpr::cpr)
       endif()
     endif()
 

@@ -268,5 +268,43 @@ function(add_deps_to name)
       endif()
     endif()
 
+    # NOTE: set an ABSL_LIBS variable to link targets
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "abseil")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET absl::base)
+          cpmaddpackage(NAME abseil GIT_TAG 20250512.0 GITHUB_REPOSITORY
+                        abseil/abseil-cpp)
+        else()
+          message(STATUS "abseil is already available, only linking it!")
+        endif()
+        if(NOT DEFINED ABSL_LIBS)
+          message(
+            FATAL_ERROR
+              "\nMissing required variable: ABSL_LIBS\n"
+              "Abseil does not provide a single 'absl' target."
+              " You must manually list the required targets.\n"
+              "Example:\n"
+              "set(ABSL_LIBS\n"
+              "  absl::base\n"
+              "  absl::flat_hash_map\n"
+              "  absl::strings\n"
+              ")\n"
+              "before calling add_deps_to(...).")
+        else()
+          message(STATUS "Linking Abseil libraries: ${ABSL_LIBS} to ${name}")
+          # mark include dirs system to prevent inheritance of compile options
+          foreach(lib ${ABSL_LIBS})
+            get_target_property(absl_include_dirs ${lib}
+                                INTERFACE_INCLUDE_DIRECTORIES)
+            if(absl_include_dirs)
+              target_include_directories(anubids SYSTEM
+                                         PRIVATE ${absl_include_dirs})
+            endif()
+          endforeach()
+          target_link_libraries(${name} PRIVATE ${ABSL_LIBS})
+        endif()
+      endif()
+    endif()
+
   endforeach()
 endfunction()

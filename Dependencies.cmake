@@ -346,5 +346,26 @@ function(add_deps_to name)
       endif()
     endif()
 
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "cpputils")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET cpputils)
+
+          if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/cpputils")
+            if(EXISTS "${CMAKE_SOURCE_DIR}/cpputils/CMakeLists.txt")
+              add_subdirectory(cpputils)
+            endif()
+          endif()
+
+          if(NOT TARGET cpputils)
+            cpmaddpackage("gh:lbatuska/cpputils#master")
+          endif()
+
+        else()
+          message(STATUS "cpputils is already available, only linking it!")
+        endif()
+        target_link_libraries(${name} PRIVATE cpputils)
+      endif()
+    endif()
+
   endforeach()
 endfunction()

@@ -122,7 +122,7 @@ function(add_deps_to name)
             NAME
             spdlog
             VERSION
-            1.15.2
+            1.15.3
             GITHUB_REPOSITORY
             "gabime/spdlog"
             OPTIONS
@@ -177,7 +177,7 @@ function(add_deps_to name)
     if(pkg STREQUAL "ALL" OR pkg STREQUAL "ixwebsocket")
       if(NOT ADD_DEPS_LINK_ONLY)
         if(NOT TARGET ixwebsocket)
-          cpmaddpackage(NAME ixwebsocket VERSION 11.4.5 GITHUB_REPOSITORY
+          cpmaddpackage(NAME ixwebsocket VERSION 11.4.6 GITHUB_REPOSITORY
                         "machinezone/IXWebSocket")
         else()
           message(STATUS "IXWebSocket is already available, only linking it!")

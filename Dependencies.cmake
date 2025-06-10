@@ -367,5 +367,27 @@ function(add_deps_to name)
       endif()
     endif()
 
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "pqxx")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET pqxx)
+          cpmaddpackage(
+            NAME
+            pqxx
+            GIT_TAG
+            7.10.1
+            GITHUB_REPOSITORY
+            jtv/libpqxx
+            OPTIONS
+            "BUILD_SHARED_LIBS OFF"
+            "SKIP_BUILD_TEST ON"
+            "BUILD_DOC OFF"
+            "INSTALL_TEST OFF")
+        else()
+          message(STATUS "pqxx is already available, only linking it!")
+        endif()
+        target_link_libraries(${name} PRIVATE pqxx)
+      endif()
+    endif()
+
   endforeach()
 endfunction()

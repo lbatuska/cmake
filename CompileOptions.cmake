@@ -1,4 +1,4 @@
-function(enable_compile_warnings project_name)
+function(enable_compile_warnings target_name)
 
   set(WARNING_FLAGS
       "-Wall"
@@ -22,7 +22,7 @@ function(enable_compile_warnings project_name)
 
   # list(APPEND WARNING_FLAGS "-Wno-unused-parameter")
 
-  target_compile_options(${project_name} PRIVATE ${WARNING_FLAGS})
+  target_compile_options(${target_name} PRIVATE ${WARNING_FLAGS})
 
   message(STATUS "Enabled warnings: ${WARNING_FLAGS}")
 endfunction()

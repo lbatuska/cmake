@@ -254,7 +254,7 @@ function(add_deps_to name)
             NAME
             cpr
             GIT_TAG
-            1.11.2
+            1.12.0
             GITHUB_REPOSITORY
             libcpr/cpr
             OPTIONS

@@ -147,7 +147,7 @@ function(add_deps_to name)
           message(STATUS "dotenv is already available, only linking it!")
         endif()
       endif()
-      target_include_directories(${name}
+      target_include_directories(${name} SYSTEM
                                  PRIVATE ${DOTENV_CPP_DIR}/include/laserpants)
     endif()
 
@@ -385,6 +385,7 @@ function(add_deps_to name)
         else()
           message(STATUS "pqxx is already available, only linking it!")
         endif()
+        make_interface_includes_system(${name} pqxx)
         target_link_libraries(${name} PRIVATE pqxx)
       endif()
     endif()

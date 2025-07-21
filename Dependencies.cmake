@@ -316,7 +316,7 @@ function(add_deps_to name)
     if(pkg STREQUAL "ALL" OR pkg STREQUAL "abseil")
       if(NOT ADD_DEPS_LINK_ONLY)
         if(NOT TARGET absl::base)
-          cpmaddpackage(NAME abseil GIT_TAG 20250512.0 GITHUB_REPOSITORY
+          cpmaddpackage(NAME abseil GIT_TAG 20250512.1 GITHUB_REPOSITORY
                         abseil/abseil-cpp)
 
         else()

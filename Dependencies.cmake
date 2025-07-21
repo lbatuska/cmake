@@ -70,19 +70,13 @@ function(add_deps_to name)
     if(pkg STREQUAL "ALL" OR pkg STREQUAL "redis-plus-plus")
       if(NOT ADD_DEPS_LINK_ONLY)
         if(NOT TARGET redis-plus-plus::redis-plus-plus)
-          if(NOT TARGET Hiredis_lib)
-            list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-            find_package(Hiredis REQUIRED)
-          endif()
-          # target_link_libraries(${name} PRIVATE ${HIREDIS_LIBRARIES})
-
           cpmaddpackage(
             NAME
             redis-plus-plus
             GIT_TAG
             # should be swapped to version once commit "update
             # cmake_minimum_required to 3.5" is included in a named version
-            e30d4c4c557568b01d5adce9df2714de8d3921c2
+            ffba366c9a08be4714b0ddcf272c34eef15ceb83
             GITHUB_REPOSITORY
             sewenew/redis-plus-plus
             OPTIONS

@@ -262,56 +262,19 @@ function(add_deps_to name)
       endif()
     endif()
 
-    # used to include Abseil without compiler warnings
-    function(make_interface_includes_system target dep)
-      get_target_property(raw_includes ${dep} INTERFACE_INCLUDE_DIRECTORIES)
-
-      message(STATUS "[${dep}] Raw includes:")
-      foreach(raw ${raw_includes})
-        message(STATUS "  - ${raw}")
-      endforeach()
-
-      if(NOT raw_includes)
-        message(WARNING "[${dep}] No INTERFACE_INCLUDE_DIRECTORIES found.")
-        return()
-      endif()
-
-      set(evaluated_includes "")
-      foreach(path ${raw_includes})
-        if(path MATCHES "^\\$<BUILD_INTERFACE:(.*)>$")
-          set(actual_path "${CMAKE_MATCH_1}")
-          message(STATUS "[${dep}] BUILD_INTERFACE -> ${actual_path}")
-          list(APPEND evaluated_includes "${actual_path}")
-        elseif(path MATCHES "^\\$<INSTALL_INTERFACE:(.*)>$")
-          set(actual_path "${CMAKE_MATCH_1}")
-          message(
-            STATUS "[${dep}] INSTALL_INTERFACE -> ${actual_path} (ignored)")
-          # Optionally add it: list(APPEND evaluated_includes "${actual_path}")
-        else()
-          message(STATUS "[${dep}] Literal include -> ${path}")
-          list(APPEND evaluated_includes "${path}")
-        endif()
-      endforeach()
-
-      if(evaluated_includes)
-        message(STATUS "[${target}] Adding SYSTEM includes from ${dep}:")
-        foreach(inc ${evaluated_includes})
-          message(STATUS "  -> ${inc}")
-        endforeach()
-        target_include_directories(${target} SYSTEM
-                                   PRIVATE ${evaluated_includes})
-      else()
-        message(
-          WARNING "[${dep}] No usable include paths found to mark as SYSTEM.")
-      endif()
-    endfunction()
-
     # NOTE: set an ABSL_LIBS variable to link targets
     if(pkg STREQUAL "ALL" OR pkg STREQUAL "abseil")
       if(NOT ADD_DEPS_LINK_ONLY)
         if(NOT TARGET absl::base)
-          cpmaddpackage(NAME abseil GIT_TAG 20250512.1 GITHUB_REPOSITORY
-                        abseil/abseil-cpp)
+          cpmaddpackage(
+            NAME
+            abseil
+            GIT_TAG
+            20250512.1
+            GITHUB_REPOSITORY
+            abseil/abseil-cpp
+            SYSTEM
+            YES)
 
         else()
           message(STATUS "abseil is already available, only linking it!")
@@ -331,10 +294,6 @@ function(add_deps_to name)
               "before calling add_deps_to(...).")
         else()
           message(STATUS "Linking Abseil libraries: ${ABSL_LIBS} to ${name}")
-          # mark include dirs system to prevent inheritance of compile options
-          foreach(lib ${ABSL_LIBS})
-            make_interface_includes_system(${name} ${lib})
-          endforeach()
           target_link_libraries(${name} PRIVATE ${ABSL_LIBS})
         endif()
       endif()
@@ -375,11 +334,12 @@ function(add_deps_to name)
             "BUILD_SHARED_LIBS OFF"
             "SKIP_BUILD_TEST ON"
             "BUILD_DOC OFF"
-            "INSTALL_TEST OFF")
+            "INSTALL_TEST OFF"
+            SYSTEM
+            YES)
         else()
           message(STATUS "pqxx is already available, only linking it!")
         endif()
-        make_interface_includes_system(${name} pqxx)
         target_link_libraries(${name} PRIVATE pqxx)
       endif()
     endif()

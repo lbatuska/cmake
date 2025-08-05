@@ -343,5 +343,39 @@ function(add_deps_to name)
       endif()
     endif()
 
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "aws")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET aws-cpp-sdk-core)
+          cpmaddpackage(
+            NAME
+            aws-cpp-sdk
+            GIT_TAG
+            1.11.620
+            GITHUB_REPOSITORY
+            aws/aws-sdk-cpp
+            SYSTEM
+            YES
+            OPTIONS
+            "BUILD_ONLY core\\\\;sesv2\\\\;sns"
+            "DISABLE_ALL_SERVICES ON"
+            "ENABLE_TESTING OFF"
+            "AUTORUN_UNIT_TESTS OFF"
+            "BUILD_SHARED_LIBS OFF"
+            "ENABLE_UNITY_BUILD ON"
+            "MINIMIZE_SIZE ON"
+            "NO_ENCRYPTION OFF"
+            "NO_HTTP_CLIENT OFF"
+            "USE_OPENSSL ON"
+            "USE_TLS_V1_2 ON"
+            "USE_TLS_V1_3 OFF"
+            "FORCE_SHARED_CRT OFF")
+        else()
+          message(STATUS "aws-cpp-sdk is already available, only linking it!")
+        endif()
+        target_link_libraries(${name} PRIVATE aws-cpp-sdk-core
+                                              aws-cpp-sdk-sesv2 aws-cpp-sdk-sns)
+      endif()
+    endif()
+
   endforeach()
 endfunction()

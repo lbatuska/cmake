@@ -86,7 +86,6 @@ function(add_deps_to name)
 
           # link a target from another directory scope >= cmake 3.13
           cmake_policy(SET CMP0079 NEW)
-          target_link_libraries(redis++_static INTERFACE ${HIREDIS_LIBRARIES})
         else()
           message(
             STATUS "redis-plus-plus is already available, only linking it!")

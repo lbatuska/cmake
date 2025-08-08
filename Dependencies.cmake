@@ -350,16 +350,14 @@ function(add_deps_to name)
             NAME
             aws-cpp-sdk
             GIT_TAG
-            1.11.620
+            1.11.622
             GITHUB_REPOSITORY
             aws/aws-sdk-cpp
-            SYSTEM
-            YES
             OPTIONS
             "BUILD_ONLY core\\\\;sesv2\\\\;sns"
-            "DISABLE_ALL_SERVICES ON"
-            "ENABLE_TESTING OFF"
             "AUTORUN_UNIT_TESTS OFF"
+            "ENABLE_TESTING OFF"
+            "DISABLE_ALL_SERVICES ON"
             "BUILD_SHARED_LIBS OFF"
             "ENABLE_UNITY_BUILD ON"
             "MINIMIZE_SIZE ON"
@@ -368,7 +366,9 @@ function(add_deps_to name)
             "USE_OPENSSL ON"
             "USE_TLS_V1_2 ON"
             "USE_TLS_V1_3 OFF"
-            "FORCE_SHARED_CRT OFF")
+            "FORCE_SHARED_CRT OFF"
+            SYSTEM
+            YES)
         else()
           message(STATUS "aws-cpp-sdk is already available, only linking it!")
         endif()

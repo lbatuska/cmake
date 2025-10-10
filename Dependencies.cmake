@@ -74,9 +74,7 @@ function(add_deps_to name)
             NAME
             redis-plus-plus
             GIT_TAG
-            # should be swapped to version once commit "update
-            # cmake_minimum_required to 3.5" is included in a named version
-            ffba366c9a08be4714b0ddcf272c34eef15ceb83
+            84f37e95d9112193fd433f65402d3d183f0b9cf7
             GITHUB_REPOSITORY
             sewenew/redis-plus-plus
             OPTIONS
@@ -99,6 +97,7 @@ function(add_deps_to name)
         if(NOT TARGET fmtlib::fmtlib
            AND NOT TARGET fmt::fmt
            AND NOT TARGET fmt::fmt-header-only)
+          # version is dictated by spdlog
           cpmaddpackage("gh:fmtlib/fmt#11.2.0")
         else()
           message(STATUS "fmt is already available, only linking it!")
@@ -206,9 +205,8 @@ function(add_deps_to name)
             inja
             GITHUB_REPOSITORY
             pantor/inja
-            # VERSION 3.4.0
             GIT_TAG
-            main
+            18ad33abe2010dbdebaa843c2daeb63aed2b3b9b
             OPTIONS
             "BUILD_STATIC_LIBS ON"
             "INJA_USE_EMBEDDED_JSON OFF"

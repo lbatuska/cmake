@@ -13,8 +13,7 @@ function(add_deps_to name)
     if(pkg STREQUAL "ALL" OR pkg STREQUAL "openssl")
       if(NOT ADD_DEPS_LINK_ONLY)
         if(NOT TARGET OpenSSL::Crypto)
-          set(OPENSSL_USE_STATIC_LIBS TRUE)
-          find_package(OpenSSL REQUIRED)
+          find_package(OpenSSL REQUIRED COMPONENTS Crypto SSL)
           if(NOT OpenSSL_FOUND)
             message(
               FATAL_ERROR

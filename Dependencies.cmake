@@ -23,7 +23,7 @@ function(add_deps_to name)
         else()
           message(STATUS "OpenSSL is already available, only linking it!")
         endif()
-        target_link_libraries(${name} PRIVATE OpenSSL::Crypto)
+        target_link_libraries(${name} PUBLIC OpenSSL::Crypto)
       endif()
     endif()
 
@@ -39,7 +39,7 @@ function(add_deps_to name)
         else()
           message(STATUS "Curl is already available, only linking it!")
         endif()
-        target_link_libraries(${name} PRIVATE CURL::libcurl)
+        target_link_libraries(${name} PUBLIC CURL::libcurl)
       endif()
     endif()
 
@@ -56,6 +56,7 @@ function(add_deps_to name)
             VERSION
             1.17.0
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "INSTALL_GTEST OFF"
             "gtest_force_shared_crt")
         else()
@@ -77,6 +78,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             sewenew/redis-plus-plus
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "REDIS_PLUS_PLUS_BUILD_STATIC ON"
             "REDIS_PLUS_PLUS_BUILD_SHARED OFF"
             "REDIS_PLUS_PLUS_BUILD_TEST OFF")
@@ -117,6 +119,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             "gabime/spdlog"
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "SPDLOG_FMT_EXTERNAL ON")
         else()
           message(STATUS "spdlog is already available, only linking it!")
@@ -153,6 +156,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             "zaphoyd/websocketpp"
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "CMAKE_POLICY_VERSION_MINIMUM 3.5")
           set(WEBSOCKET_CPP_DIR
               ${websocketpp_SOURCE_DIR}
@@ -188,6 +192,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             nlohmann/json
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "JSON_BuildTests OFF")
         else()
           message(STATUS "nlohmann_json is already available, only linking it!")
@@ -207,6 +212,7 @@ function(add_deps_to name)
             GIT_TAG
             v3.5.0
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "BUILD_STATIC_LIBS ON"
             "INJA_USE_EMBEDDED_JSON OFF"
             "INJA_BUILD_TESTS OFF")
@@ -232,6 +238,7 @@ function(add_deps_to name)
             VERSION
             0.7.1
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "JWT_BUILD_EXAMPLES OFF")
           set(jwt-cpp_CPP_DIR
               ${jwt-cpp_SOURCE_DIR}
@@ -255,6 +262,8 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             libcpr/cpr
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
+            "CPR_USE_SYSTEM_CURL ON"
             "CPR_BUILD_TESTS OFF"
             "BUILD_SHARED_LIBS OFF"
             "CPR_ENABLE_SSL ON")
@@ -334,6 +343,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             jtv/libpqxx
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "BUILD_SHARED_LIBS OFF"
             "SKIP_BUILD_TEST ON"
             "BUILD_DOC OFF"
@@ -358,6 +368,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             aws/aws-sdk-cpp
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "BUILD_ONLY core\\\\;sesv2\\\\;sns"
             "AUTORUN_UNIT_TESTS OFF"
             "ENABLE_TESTING OFF"
@@ -392,6 +403,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             leethomason/tinyxml2
             OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "BUILD_SHARED_LIBS OFF"
             "BUILD_TESTING OFF")
         else()
@@ -413,8 +425,8 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             rbock/sqlpp11
             OPTIONS
-            "BUILD_POSTGRESQL_CONNECTOR ON"
-            "CMAKE_EXPORT_COMPILE_COMMANDS ON")
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
+            "BUILD_POSTGRESQL_CONNECTOR ON")
           set(SQLPP11_DIR
               ${sqlpp11_SOURCE_DIR}
               CACHE INTERNAL "")

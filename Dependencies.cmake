@@ -224,8 +224,15 @@ function(add_deps_to name)
     if(pkg STREQUAL "ALL" OR pkg STREQUAL "jwt-cpp")
       if(NOT ADD_DEPS_LINK_ONLY)
         if(NOT TARGET jwt-cpp)
-          cpmaddpackage(NAME jwt-cpp GITHUB_REPOSITORY Thalhammer/jwt-cpp
-                        VERSION 0.7.1)
+          cpmaddpackage(
+            NAME
+            jwt-cpp
+            GITHUB_REPOSITORY
+            Thalhammer/jwt-cpp
+            VERSION
+            0.7.1
+            OPTIONS
+            "JWT_BUILD_EXAMPLES OFF")
           set(jwt-cpp_CPP_DIR
               ${jwt-cpp_SOURCE_DIR}
               CACHE INTERNAL "")
@@ -371,6 +378,50 @@ function(add_deps_to name)
         endif()
         target_link_libraries(${name} PRIVATE aws-cpp-sdk-core
                                               aws-cpp-sdk-sesv2 aws-cpp-sdk-sns)
+      endif()
+    endif()
+
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "tinyxml2")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET tinyxml2::tinyxml2)
+          cpmaddpackage(
+            NAME
+            tinyxml2
+            GIT_TAG
+            master
+            GITHUB_REPOSITORY
+            leethomason/tinyxml2
+            OPTIONS
+            "BUILD_SHARED_LIBS OFF"
+            "BUILD_TESTING OFF")
+        else()
+          message(STATUS "tinyxml2 is already available")
+        endif()
+        target_link_libraries(${name} PRIVATE tinyxml2)
+      endif()
+    endif()
+
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "sqlpp11")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET sqlpp11)
+          # WARN: ddl2cpp needs pyparsing
+          cpmaddpackage(
+            NAME
+            sqlpp11
+            GIT_TAG
+            main
+            GITHUB_REPOSITORY
+            rbock/sqlpp11
+            OPTIONS
+            "BUILD_POSTGRESQL_CONNECTOR ON"
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON")
+          set(SQLPP11_DIR
+              ${sqlpp11_SOURCE_DIR}
+              CACHE INTERNAL "")
+        else()
+          message(STATUS "sqlpp11 is already available, only linking it!")
+        endif()
+        target_link_libraries(${name} PRIVATE sqlpp11)
       endif()
     endif()
 

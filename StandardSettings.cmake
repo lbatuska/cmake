@@ -15,9 +15,4 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# colored compiler messages
-if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  add_compile_options(-fcolor-diagnostics)
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  add_compile_options(-fdiagnostics-color=always)
-endif()
+set(CMAKE_COLOR_DIAGNOSTICS ON)

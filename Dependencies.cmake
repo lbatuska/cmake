@@ -73,7 +73,7 @@ function(add_deps_to name)
             NAME
             redis-plus-plus
             GIT_TAG
-            84f37e95d9112193fd433f65402d3d183f0b9cf7
+            180d978b21d80e5da28ec96759fa8298c65dd760
             GITHUB_REPOSITORY
             sewenew/redis-plus-plus
             OPTIONS
@@ -97,7 +97,7 @@ function(add_deps_to name)
            AND NOT TARGET fmt::fmt
            AND NOT TARGET fmt::fmt-header-only)
           # version is dictated by spdlog
-          cpmaddpackage("gh:fmtlib/fmt#11.2.0")
+          cpmaddpackage("gh:fmtlib/fmt#12.0.0")
         else()
           message(STATUS "fmt is already available, only linking it!")
         endif()
@@ -113,7 +113,7 @@ function(add_deps_to name)
             NAME
             spdlog
             VERSION
-            1.15.3
+            1.16.0
             GITHUB_REPOSITORY
             "gabime/spdlog"
             OPTIONS
@@ -205,7 +205,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             pantor/inja
             GIT_TAG
-            18ad33abe2010dbdebaa843c2daeb63aed2b3b9b
+            v3.5.0
             OPTIONS
             "BUILD_STATIC_LIBS ON"
             "INJA_USE_EMBEDDED_JSON OFF"
@@ -244,7 +244,7 @@ function(add_deps_to name)
             NAME
             cpr
             GIT_TAG
-            1.12.0
+            1.14.1
             GITHUB_REPOSITORY
             libcpr/cpr
             OPTIONS
@@ -323,7 +323,7 @@ function(add_deps_to name)
             NAME
             pqxx
             GIT_TAG
-            7.10.1
+            7.10.3
             GITHUB_REPOSITORY
             jtv/libpqxx
             OPTIONS

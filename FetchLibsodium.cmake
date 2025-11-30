@@ -29,7 +29,7 @@ set_target_properties(
 
 target_sources(sodium PRIVATE ${LIBSODIUM_SOURCES})
 
-set_target_properties(sodium PROPERTIES C_STANDARD 99)
+target_compile_features(sodium PRIVATE c_std_99)
 
 target_include_directories(
   sodium

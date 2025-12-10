@@ -426,7 +426,9 @@ function(add_deps_to name)
             rbock/sqlpp11
             OPTIONS
             "CMAKE_EXPORT_COMPILE_COMMANDS ON"
-            "BUILD_POSTGRESQL_CONNECTOR ON")
+            "BUILD_POSTGRESQL_CONNECTOR ON"
+            "BUILD_SQLITE3_CONNECTOR ON"
+            "DEPENDENCY_CHECK OFF")
           set(SQLPP11_DIR
               ${sqlpp11_SOURCE_DIR}
               CACHE INTERNAL "")

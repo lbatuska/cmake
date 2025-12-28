@@ -74,7 +74,7 @@ function(add_deps_to name)
             NAME
             redis-plus-plus
             GIT_TAG
-            180d978b21d80e5da28ec96759fa8298c65dd760
+            dcc2712c81a155dcbb213eeb0fdd2b196b803050
             GITHUB_REPOSITORY
             sewenew/redis-plus-plus
             OPTIONS
@@ -339,7 +339,7 @@ function(add_deps_to name)
             NAME
             pqxx
             GIT_TAG
-            7.10.3
+            7.10.4
             GITHUB_REPOSITORY
             jtv/libpqxx
             OPTIONS

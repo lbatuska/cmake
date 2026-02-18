@@ -439,5 +439,28 @@ function(add_deps_to name)
       endif()
     endif()
 
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "rapidjson")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET rapidjson)
+          cpmaddpackage(
+            NAME
+            rapidjson
+            GIT_TAG
+            master
+            GITHUB_REPOSITORY
+            Tencent/rapidjson
+            OPTIONS
+            "CMAKE_POLICY_VERSION_MINIMUM 3.5"
+            "RAPIDJSON_BUILD_TESTS OFF")
+          set(rapidjson_DIR
+              ${rapidjson_SOURCE_DIR}
+              CACHE INTERNAL "")
+        else()
+          message(STATUS "rapidjson is already available, only linking it!")
+        endif()
+        target_include_directories(${name} PRIVATE ${rapidjson_DIR}/include)
+      endif()
+    endif()
+
   endforeach()
 endfunction()

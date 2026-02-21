@@ -74,7 +74,7 @@ function(add_deps_to name)
             NAME
             redis-plus-plus
             GIT_TAG
-            dcc2712c81a155dcbb213eeb0fdd2b196b803050
+            2c47000b9d90350be3a9984a94be42bc750dc6a7
             GITHUB_REPOSITORY
             sewenew/redis-plus-plus
             OPTIONS
@@ -99,7 +99,7 @@ function(add_deps_to name)
            AND NOT TARGET fmt::fmt
            AND NOT TARGET fmt::fmt-header-only)
           # version is dictated by spdlog
-          cpmaddpackage("gh:fmtlib/fmt#12.0.0")
+          cpmaddpackage("gh:fmtlib/fmt#12.1.0")
         else()
           message(STATUS "fmt is already available, only linking it!")
         endif()
@@ -115,7 +115,7 @@ function(add_deps_to name)
             NAME
             spdlog
             VERSION
-            1.16.0
+            1.17.0
             GITHUB_REPOSITORY
             "gabime/spdlog"
             OPTIONS
@@ -236,7 +236,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             Thalhammer/jwt-cpp
             VERSION
-            0.7.1
+            0.7.2
             OPTIONS
             "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "JWT_BUILD_EXAMPLES OFF")

@@ -132,7 +132,7 @@ function(add_deps_to name)
       if(NOT ADD_DEPS_LINK_ONLY)
         if(NOT TARGET dotenv)
           cpmaddpackage(NAME dotenv-cpp GIT_TAG master GITHUB_REPOSITORY
-                        "laserpants/dotenv-cpp")
+                        "laserpants/dotenv-cpp" OPTIONS "BUILD_DOCS OFF")
           # cache the variable so it's available 2nd time when target exists
           set(DOTENV_CPP_DIR
               ${dotenv-cpp_SOURCE_DIR}

@@ -131,8 +131,15 @@ function(add_deps_to name)
     if(pkg STREQUAL "ALL" OR pkg STREQUAL "dotenv")
       if(NOT ADD_DEPS_LINK_ONLY)
         if(NOT TARGET dotenv)
-          cpmaddpackage(NAME dotenv-cpp GIT_TAG master GITHUB_REPOSITORY
-                        "laserpants/dotenv-cpp" OPTIONS "BUILD_DOCS OFF")
+          cpmaddpackage(
+            NAME
+            dotenv-cpp
+            GIT_TAG
+            master
+            GITHUB_REPOSITORY
+            "laserpants/dotenv-cpp"
+            OPTIONS
+            "BUILD_DOCS OFF")
           # cache the variable so it's available 2nd time when target exists
           set(DOTENV_CPP_DIR
               ${dotenv-cpp_SOURCE_DIR}
@@ -258,7 +265,7 @@ function(add_deps_to name)
             NAME
             cpr
             GIT_TAG
-            1.14.1
+            1.14.2
             GITHUB_REPOSITORY
             libcpr/cpr
             OPTIONS

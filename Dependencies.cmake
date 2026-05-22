@@ -135,7 +135,7 @@ function(add_deps_to name)
             NAME
             dotenv-cpp
             GIT_TAG
-            master
+            ee688ac80b1773c7ecc8a7e7cc545ac58d0ec20a
             GITHUB_REPOSITORY
             "laserpants/dotenv-cpp"
             OPTIONS
@@ -217,7 +217,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             pantor/inja
             GIT_TAG
-            v3.5.0
+            38196c846f3bb1334d02d6d882708fe18f6423cf
             OPTIONS
             "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "BUILD_STATIC_LIBS ON"
@@ -242,8 +242,8 @@ function(add_deps_to name)
             jwt-cpp
             GITHUB_REPOSITORY
             Thalhammer/jwt-cpp
-            VERSION
-            0.7.2
+            GIT_TAG
+            0a503e75084cfdb48cc2186e6b961444eb819007
             OPTIONS
             "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "JWT_BUILD_EXAMPLES OFF")
@@ -346,7 +346,7 @@ function(add_deps_to name)
             NAME
             pqxx
             GIT_TAG
-            7.10.4
+            7.10.7
             GITHUB_REPOSITORY
             jtv/libpqxx
             OPTIONS
@@ -371,7 +371,7 @@ function(add_deps_to name)
             NAME
             aws-cpp-sdk
             GIT_TAG
-            1.11.622
+            1.11.812
             GITHUB_REPOSITORY
             aws/aws-sdk-cpp
             OPTIONS
@@ -406,7 +406,7 @@ function(add_deps_to name)
             NAME
             tinyxml2
             GIT_TAG
-            master
+            3dcad8e3c38e7091ae3771bf63020027f91715ce
             GITHUB_REPOSITORY
             leethomason/tinyxml2
             OPTIONS
@@ -428,7 +428,7 @@ function(add_deps_to name)
             NAME
             sqlpp11
             GIT_TAG
-            main
+            8c05983a31272cf9740cb521500c66a032aad678
             GITHUB_REPOSITORY
             rbock/sqlpp11
             OPTIONS
@@ -453,7 +453,7 @@ function(add_deps_to name)
             NAME
             rapidjson
             GIT_TAG
-            master
+            24b5e7a8b27f42fa16b96fc70aade9106cf7102f
             GITHUB_REPOSITORY
             Tencent/rapidjson
             OPTIONS

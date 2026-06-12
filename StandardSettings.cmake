@@ -16,3 +16,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_COLOR_DIAGNOSTICS ON)
+
+function(enable_debug_def_for target_name)
+  target_compile_definitions(
+    ${target_name} PRIVATE $<$<CONFIG:RelWithDebInfo>:DEBUG>
+                           $<$<CONFIG:Debug>:DEBUG>)
+endfunction()

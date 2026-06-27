@@ -569,5 +569,56 @@ function(add_deps_to name)
       target_link_libraries(${name} PRIVATE bytetrack::ncnn)
     endif()
 
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "onnxruntime")
+      if(NOT TARGET onnxruntime::onnxruntime)
+        find_package(onnxruntime CONFIG QUIET)
+
+        if(NOT TARGET onnxruntime::onnxruntime)
+          message(
+            STATUS
+              "ONNX Runtime config package not found; trying manual system lookup"
+          )
+
+          find_path(
+            ONNXRUNTIME_INCLUDE_DIR
+            NAMES onnxruntime_cxx_api.h
+            PATH_SUFFIXES onnxruntime onnxruntime/core/session)
+
+          find_library(ONNXRUNTIME_LIBRARY NAMES onnxruntime)
+
+          if(NOT ONNXRUNTIME_INCLUDE_DIR OR NOT ONNXRUNTIME_LIBRARY)
+            message(
+              FATAL_ERROR
+                "Could not find ONNX Runtime. Install onnxruntime-cpu/cuda/rocm, "
+                "or set ONNXRUNTIME_INCLUDE_DIR and ONNXRUNTIME_LIBRARY manually."
+            )
+          endif()
+
+          add_library(onnxruntime::onnxruntime UNKNOWN IMPORTED)
+
+          set_target_properties(
+            onnxruntime::onnxruntime
+            PROPERTIES IMPORTED_LOCATION "${ONNXRUNTIME_LIBRARY}"
+                       INTERFACE_INCLUDE_DIRECTORIES
+                       "${ONNXRUNTIME_INCLUDE_DIR}")
+        endif()
+      else()
+        message(STATUS "onnxruntime is already available, only linking it!")
+      endif()
+
+      # Arch's ONNX Runtime package may need protobuf explicitly during final
+      # link.
+      if(NOT TARGET protobuf::libprotobuf)
+        find_package(Protobuf CONFIG QUIET)
+
+        if(NOT TARGET protobuf::libprotobuf)
+          find_package(Protobuf REQUIRED)
+        endif()
+      endif()
+
+      target_link_libraries(${name} PRIVATE onnxruntime::onnxruntime
+                                            protobuf::libprotobuf)
+    endif()
+
   endforeach()
 endfunction()

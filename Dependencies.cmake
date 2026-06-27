@@ -469,5 +469,105 @@ function(add_deps_to name)
       endif()
     endif()
 
+    if(pkg STREQUAL "ALL" OR pkg STREQUAL "ncnn")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET ncnn)
+          cpmaddpackage(
+            NAME
+            ncnn
+            GITHUB_REPOSITORY
+            Tencent/ncnn
+            GIT_TAG
+            e54f7b1f88434e1d844ea0551b880a1cfb079ce1
+            OPTIONS
+            "CMAKE_EXPORT_COMPILE_COMMANDS ON"
+            "NCNN_SHARED_LIB OFF"
+            "NCNN_INSTALL_SDK OFF"
+            "NCNN_BUILD_TESTS OFF"
+            "NCNN_BUILD_BENCHMARK OFF"
+            "NCNN_BUILD_EXAMPLES OFF"
+            "NCNN_BUILD_TOOLS OFF"
+            "NCNN_PYTHON OFF"
+            "NCNN_VULKAN OFF")
+
+          if(TARGET ncnn AND NOT TARGET ncnn::ncnn)
+            add_library(ncnn::ncnn ALIAS ncnn)
+          endif()
+        else()
+          message(STATUS "ncnn is already available, only linking it!")
+        endif()
+      endif()
+
+      if(TARGET ncnn::ncnn)
+        target_link_libraries(${name} PRIVATE ncnn::ncnn)
+      else()
+        target_link_libraries(${name} PRIVATE ncnn)
+      endif()
+    endif()
+
+    if(pkg STREQUAL "bytetrack-ncnn")
+      if(NOT ADD_DEPS_LINK_ONLY)
+        if(NOT TARGET Eigen3::Eigen)
+          cpmaddpackage(
+            NAME
+            eigen
+            GIT_REPOSITORY
+            https://gitlab.com/libeigen/eigen.git
+            GIT_TAG
+            bc3b39870ecb690a623a3f49149a358b95c5781d
+            DOWNLOAD_ONLY
+            YES)
+
+          add_library(Eigen3::Eigen INTERFACE IMPORTED)
+          set_target_properties(
+            Eigen3::Eigen PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
+                                     "${eigen_SOURCE_DIR}")
+        endif()
+
+        # ByteTrack uses OpenCV types even in the tracker API. For a full video
+        # demo, add imgproc/imgcodecs/videoio/highgui too.
+        if(NOT OpenCV_FOUND)
+          find_package(OpenCV REQUIRED COMPONENTS core)
+        endif()
+
+        if(NOT TARGET bytetrack_ncnn)
+          cpmaddpackage(
+            NAME
+            ByteTrack
+            GITHUB_REPOSITORY
+            FoundationVision/ByteTrack
+            GIT_TAG
+            d1bf0191adff59bc8fcfeaa0b33d3d1642552a99
+            DOWNLOAD_ONLY
+            YES)
+
+          add_library(
+            bytetrack_ncnn STATIC
+            "${ByteTrack_SOURCE_DIR}/deploy/ncnn/cpp/src/BYTETracker.cpp"
+            "${ByteTrack_SOURCE_DIR}/deploy/ncnn/cpp/src/STrack.cpp"
+            "${ByteTrack_SOURCE_DIR}/deploy/ncnn/cpp/src/kalmanFilter.cpp"
+            "${ByteTrack_SOURCE_DIR}/deploy/ncnn/cpp/src/lapjv.cpp"
+            "${ByteTrack_SOURCE_DIR}/deploy/ncnn/cpp/src/utils.cpp")
+
+          add_library(bytetrack::ncnn ALIAS bytetrack_ncnn)
+
+          target_compile_features(bytetrack_ncnn PUBLIC cxx_std_14)
+
+          target_include_directories(
+            bytetrack_ncnn SYSTEM
+            PUBLIC "${ByteTrack_SOURCE_DIR}/deploy/ncnn/cpp/include"
+                   ${OpenCV_INCLUDE_DIRS})
+
+          target_link_libraries(bytetrack_ncnn PUBLIC Eigen3::Eigen
+                                                      ${OpenCV_LIBS})
+        else()
+          message(
+            STATUS "ByteTrack ncnn core is already available, only linking it!")
+        endif()
+      endif()
+
+      target_link_libraries(${name} PRIVATE bytetrack::ncnn)
+    endif()
+
   endforeach()
 endfunction()

@@ -74,7 +74,7 @@ function(add_deps_to name)
             NAME
             redis-plus-plus
             GIT_TAG
-            2c47000b9d90350be3a9984a94be42bc750dc6a7
+            4b4cd0dc2931e96842ef05e165673b8679e32f48
             GITHUB_REPOSITORY
             sewenew/redis-plus-plus
             OPTIONS

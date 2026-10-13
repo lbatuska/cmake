@@ -243,7 +243,7 @@ function(add_deps_to name)
             GITHUB_REPOSITORY
             Thalhammer/jwt-cpp
             GIT_TAG
-            0a503e75084cfdb48cc2186e6b961444eb819007
+            1e9b1354e1b70fce293277d01abdd02b0082b1de
             OPTIONS
             "CMAKE_EXPORT_COMPILE_COMMANDS ON"
             "JWT_BUILD_EXAMPLES OFF")
